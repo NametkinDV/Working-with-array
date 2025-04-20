@@ -4,8 +4,8 @@
 
 class t1{};
 
-void create_mass_back(Mass ****main_mass, int &size_mass); // 1.Создаём массив в конце
-void create_mass(Mass ***main_mass, int &size_mass); // 1.Создаём массив
+void create_mass(Mass **main_mass, int &size_mass, int pos_add); // Создаём массив
+void menu_create_mass(Mass **main_mass, int &size_mass); // 1.Меню создания массива
 
 
 #endif

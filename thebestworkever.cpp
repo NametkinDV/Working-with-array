@@ -3,32 +3,32 @@
 #include "createarray.h"
 #include "deletearray.h"
 
-void insert_items(Mass ***main_mass, int &size_mass) // 3.Добавляем элементы
+void insert_items(Mass **main_mass, int &size_mass) // 3.Добавляем элементы
 {
   
 }
 
-void delete_items(Mass ***main_mass, int &size_mass) // 4.Удаляем элементы
+void delete_items(Mass **main_mass, int &size_mass) // 4.Удаляем элементы
 {
   
 }
 
-void seek_items(Mass ***main_mass, int &size_mass) // 5.Ищем элементы
+void seek_items(Mass **main_mass, int &size_mass) // 5.Ищем элементы
 {
   
 }
 
-void replace_items(Mass ***main_mass, int &size_mass) // 6.Заменяем элементы
+void replace_items(Mass **main_mass, int &size_mass) // 6.Заменяем элементы
 {
   
 }
 
-void sort_items(Mass ***main_mass, int &size_mass) // 7.Сортируем элементы
+void sort_items(Mass **main_mass, int &size_mass) // 7.Сортируем элементы
 {
   
 }
 
-void mix_items(Mass ***main_mass, int &size_mass) // 8.Перемешиваем элементы
+void mix_items(Mass **main_mass, int &size_mass) // 8.Перемешиваем элементы
 {
   
 }
@@ -39,7 +39,8 @@ void launch(Mass **main_mass, int &size_mass) // Запуск функции д�
   
   while(1)
     {
-      std::cout << "1.Create mass" << std::endl
+      std::cout << std::endl
+		<< "1.Create mass" << std::endl
 		<< "2.Delete mass" << std::endl
 		<< "3.Insert items" << std::endl
 		<< "4.Delete items" << std::endl
@@ -47,7 +48,8 @@ void launch(Mass **main_mass, int &size_mass) // Запуск функции д�
 		<< "6.Replace items" << std::endl
 		<< "7.Sort items" << std::endl
 		<< "8.Mix items" << std::endl
-		<< "0.Exit" << std::endl;
+		<< "0.Exit" << std::endl << std::endl
+		<< "Select action: ";
 
       std::cin >> what_to_do;
       
@@ -55,48 +57,49 @@ void launch(Mass **main_mass, int &size_mass) // Запуск функции д�
 	{
 	case 0: // Выбегаем
 	  {
-	    delete_all(&main_mass, size_mass);
+	    delete_all(main_mass, size_mass);
+	    std::cout << std::endl << "Goodbye!" << std::endl;
 	    return; 
 	  }; break;
 	  
 	case 1: // Создаём массив
 	  {
-	    create_mass(&main_mass, size_mass);
+	    menu_create_mass(main_mass, size_mass);
 	  }; break;
 
 	case 2: // Удаляем массив
 	  {
-	    delete_mass(&main_mass, size_mass);
+	    menu_delete_mass(main_mass, size_mass);
 	  }; break;
 
 	case 3: // Добавляем элементы
 	  {
-	    insert_items(&main_mass, size_mass);
+	    insert_items(main_mass, size_mass);
 	  }; break;
 	  
 	case 4: // Удаляем элементы
 	  {
-	    delete_items(&main_mass, size_mass);
+	    delete_items(main_mass, size_mass);
 	  }; break;
 
 	case 5: // Ищем элементы
 	  {
-	    seek_items(&main_mass, size_mass);
+	    seek_items(main_mass, size_mass);
 	  }; break;
 
 	case 6: // Заменяем элементы
 	  {
-	    replace_items(&main_mass, size_mass);
+	    replace_items(main_mass, size_mass);
 	  }; break;
 
 	case 7: // Сортируем элементы
 	  {
-	    sort_items(&main_mass, size_mass);
+	    sort_items(main_mass, size_mass);
 	  }; break;
 
 	case 8: // Перемешиваем элементы
 	  {
-	    mix_items(&main_mass, size_mass);
+	    mix_items(main_mass, size_mass);
 	  }; break;
 	
 	}

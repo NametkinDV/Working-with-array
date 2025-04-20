@@ -1,39 +1,105 @@
 #include "deletearray.h"
 
-void delete_mass(Mass ***main_mass, int &size_mass) // 2.Удаляем массив
+
+void delete_mass(Mass **main_mass, int &size_mass, int pos_del) // 2.Удаляем массив
 {
-    if (size_mass == 0 || **main_mass == nullptr) // Если пришёл пустой массив
+    if (size_mass == 0 || *main_mass == nullptr) // Если пришёл пустой массив
       {
-	std::cout << "The array is empty! There is nothing to delete!" << std::endl;
+	std::cout << std::endl << "The array is empty! There is nothing to delete!" << std::endl;
 	return;
       }
 
     if(size_mass == 1)
       {
-	delete[] **main_mass;
-	**main_mass = nullptr;
+	delete[] *main_mass;
+	*main_mass = nullptr;
       }
     else
       {
 	Mass *temp = new Mass[size_mass-1];
-	for (int i = 0; i < size_mass-1; ++i) temp[i] = (**main_mass)[i];
+	for (int i = 0; i < size_mass-1; ++i) temp[i] = (*main_mass)[i];
+
+	for (int i = 0, j = 0; i < size_mass-1; ++i) // Копирует существующие элементы, проходя мимо удалённого
+	{
+	  if (i == pos_del) ++j;
+	  temp[i] = (*main_mass)[j];
+	  ++j;
+	}
 	
-	delete[] **main_mass;
-	**main_mass = temp;
+	delete[] *main_mass;
+	*main_mass = temp;
 	temp = nullptr;;
       }
     
     --size_mass;
 
-    std::cout << "Another element has been deleted!" <<  "  " << size_mass << "  " << std::endl;
+    std::cout << std::endl <<"Element has been deleted! Number of elements: " << size_mass << std::endl;
 }
 
-void delete_all(Mass ***main_mass, int &size_mass) // Полная очистка памяти
+
+void menu_delete_mass(Mass **main_mass, int &size_mass) // 1.Меню удаления массива
 {
-  if (size_mass == 0 || **main_mass == nullptr) return; // Если пришёл пустой массив
+  int what_to_do = 0;
   
-  delete[] **main_mass;
-  **main_mass = nullptr;
+  while(1)
+    {
+      std::cout << std::endl
+		<< "1.Delete mass in front" << std::endl
+		<< "2.Delete mass in end" << std::endl
+		<< "3.Delete mass in select place" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+
+      std::cin >> what_to_do;
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return; 
+	  }; break;
+	  
+	case 1: // Удаляем массив в начале
+	  {
+	    delete_mass(main_mass, size_mass, 0);
+	  }; break;
+
+	case 2: // Удаляем массив в конце
+	  {
+	    delete_mass(main_mass, size_mass, size_mass);
+	  }; break;
+
+	case 3: // Удаляем массив в выбранном месте
+	  {
+	    if (size_mass == 0)
+	      {
+		std::cerr << std::endl << "What are you going to delete here?"; // Что ты тут собрался удалять?!
+		break;
+	      }
+	    
+	    int pos = size_mass;
+	    std::cout << "Select position from 0 to " << size_mass << ":";
+	    std::cin >> pos;
+
+	    if (pos < 0 || size_mass < pos)
+	      {
+		std::cerr << std::endl << "Not guess, buddy!" << std::endl;
+		break;
+	      }
+
+	    delete_mass(main_mass, size_mass, pos);
+	  }; break;
+	}
+    }
+}
+
+
+void delete_all(Mass **main_mass, int &size_mass) // Полная очистка памяти
+{
+  if (size_mass == 0 || *main_mass == nullptr) return; // Если пришёл пустой массив
+  
+  delete[] *main_mass;
+  *main_mass = nullptr;
   size_mass = 0;	
   std::cout << "The memery has been cleared!" << std::endl;
 }
