@@ -9,15 +9,14 @@ void delete_mass(Mass **main_mass, int &size_mass, int pos_del) // 2.Удаля�
 	return;
       }
 
-    if(size_mass == 1)
+    if(size_mass == 1) // Удаляем последний оставшийся массив
       {
 	delete[] *main_mass;
 	*main_mass = nullptr;
       }
-    else
+    else // Удаляем массив в нужном месте
       {
 	Mass *temp = new Mass[size_mass-1];
-	for (int i = 0; i < size_mass-1; ++i) temp[i] = (*main_mass)[i];
 
 	for (int i = 0, j = 0; i < size_mass-1; ++i) // Копирует существующие элементы, проходя мимо удалённого
 	{
@@ -33,7 +32,7 @@ void delete_mass(Mass **main_mass, int &size_mass, int pos_del) // 2.Удаля�
     
     --size_mass;
 
-    std::cout << std::endl <<"Element has been deleted! Number of elements: " << size_mass << std::endl;
+    std::cout << std::endl <<"Array has been deleted! Number of elements: " << size_mass << std::endl;
 }
 
 
@@ -44,9 +43,9 @@ void menu_delete_mass(Mass **main_mass, int &size_mass) // 1.Меню удале
   while(1)
     {
       std::cout << std::endl
-		<< "1.Delete mass in front" << std::endl
-		<< "2.Delete mass in end" << std::endl
-		<< "3.Delete mass in select place" << std::endl
+		<< "1.Delete array in front" << std::endl
+		<< "2.Delete array in end" << std::endl
+		<< "3.Delete array at selected location" << std::endl
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
 

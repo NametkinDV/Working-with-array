@@ -1,46 +1,58 @@
 #include <iostream>
-#include "thebestworkever.h"
+#include "Mass.h"
 #include "createarray.h"
 #include "deletearray.h"
 
-void insert_items(Mass **main_mass, int &size_mass) // 3.Добавляем элементы
+Mass *main_array = nullptr;
+int num_of_arrays = 0;
+
+int select_arr() // Выбор массива для обработки
 {
+  if (num_of_arrays == 0) { return -1; } // Если элементов нет
+  if (num_of_arrays == 1) { return 0; } // Если элемент единственный
   
+  int select_arr = 0;
+  
+  while(1) // Выбор пользователя одного из массивов
+    {
+      std::cout << std::endl
+	<< "Select array: ";
+
+      std::cin >> select_arr;
+
+      if (0 <= select_arr && select_arr < num_of_arrays) return select_arr;
+    }
+  return -1; // На всякий случай
 }
 
-void delete_items(Mass **main_mass, int &size_mass) // 4.Удаляем элементы
+
+void print_mass()
 {
-  
+      if (main_array != nullptr && num_of_arrays != 0)
+	  for (int i = 0; i < num_of_arrays; ++i)
+	    {
+	      std::cout << i+1 << ": ";
+	      main_array[i].print();
+	      std::cout << std::endl;
+	    }
+      else
+	{
+	  std::cout << "Empty";
+	  std::cout << std::endl;
+	}
 }
 
-void seek_items(Mass **main_mass, int &size_mass) // 5.Ищем элементы
-{
-  
-}
 
-void replace_items(Mass **main_mass, int &size_mass) // 6.Заменяем элементы
-{
-  
-}
-
-void sort_items(Mass **main_mass, int &size_mass) // 7.Сортируем элементы
-{
-  
-}
-
-void mix_items(Mass **main_mass, int &size_mass) // 8.Перемешиваем элементы
-{
-  
-}
-
-void launch(Mass **main_mass, int &size_mass) // Запуск функции для работы с массивами 
+void launch(Mass **main_mass) // Запуск работы с массивами 
 {
   int what_to_do = 0;
   
   while(1)
     {
+      print_mass();
+      
       std::cout << std::endl
-		<< "1.Create mass" << std::endl
+		<<"1.Create mass" << std::endl
 		<< "2.Delete mass" << std::endl
 		<< "3.Insert items" << std::endl
 		<< "4.Delete items" << std::endl
@@ -57,49 +69,55 @@ void launch(Mass **main_mass, int &size_mass) // Запуск функции д�
 	{
 	case 0: // Выбегаем
 	  {
-	    delete_all(main_mass, size_mass);
+	    delete_all(main_mass, num_of_arrays);
 	    std::cout << std::endl << "Goodbye!" << std::endl;
 	    return; 
 	  }; break;
 	  
 	case 1: // Создаём массив
 	  {
-	    menu_create_mass(main_mass, size_mass);
+	    menu_create_mass(main_mass, num_of_arrays);
 	  }; break;
 
 	case 2: // Удаляем массив
 	  {
-	    menu_delete_mass(main_mass, size_mass);
+	    menu_delete_mass(main_mass, num_of_arrays);
 	  }; break;
 
 	case 3: // Добавляем элементы
 	  {
-	    insert_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].insert_items();
 	  }; break;
 	  
 	case 4: // Удаляем элементы
 	  {
-	    delete_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].delete_items();
 	  }; break;
 
 	case 5: // Ищем элементы
 	  {
-	    seek_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].seek_items();
 	  }; break;
 
 	case 6: // Заменяем элементы
 	  {
-	    replace_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].replace_items();
 	  }; break;
 
 	case 7: // Сортируем элементы
 	  {
-	    sort_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].sort_items();
 	  }; break;
 
 	case 8: // Перемешиваем элементы
 	  {
-	    mix_items(main_mass, size_mass);
+	    int select = select_arr();
+	    if (select != -1) (*main_mass)[select].mix_items();
 	  }; break;
 	
 	}
@@ -108,9 +126,7 @@ void launch(Mass **main_mass, int &size_mass) // Запуск функции д�
 
 int main()
 {
-  Mass *main_mass = nullptr;
-  int size = 0;
-  launch(&main_mass, size);
+  launch(&main_array);
 
   return 0;
 }

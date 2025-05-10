@@ -1,6 +1,6 @@
 #ifndef deletearray_h
 #define deletearray_h
-#include "thebestworkever.h"
+#include "Mass.h"
 
 class t2{};
 

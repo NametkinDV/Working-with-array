@@ -1,6 +1,6 @@
 #ifndef createarray_h
 #define createarray_h
-#include "thebestworkever.h"
+#include "Mass.h"
 
 class t1{};
 
