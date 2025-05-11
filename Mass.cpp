@@ -52,70 +52,133 @@ void Mass::initialization() // Начальная инициализация
 }
 
 
-void Mass::insert_item() // Добавляем элемент
-{
+void Mass::insert_item(int pos_add) // Добавляем элемент
+{  
+   int *temp = new int[size+1];
+      	
+      for (int i = 0, j = 0; i <= size; ++i) // Копирует существующие элементы и инициализирует созданный
+	{
+	  if (i == pos_add)
+	    {
+	      std::cout << "Enter a new element: ";
+	      std::cin >> temp[i]; // Инициализируем новый элемент
+	    } 
+	  else
+	    {
+	      temp[i] = arr[j]; // Копирует созданные
+	      ++j;
+	    }
+	}
 
+      delete[] arr;
+      arr = temp;
+      temp = nullptr;;
+      
+      ++size;
 }
 
 
 void Mass::menu_insert_items() // Меню добавления элементов
 {
-  int what_to_do = 0;
-
-  std::cout << std::endl;
-  print(); 
-  std::cout << std::endl;
+  int what_to_do = -1;
   
-  while(1)
-    {
-      std::cout << std::endl
-		<< "1.Insert one element" << std::endl
-		<< "2.Insert multiple elements" << std::endl
+  while(what_to_do != 0)
+    {      
+      std::cout << std::endl;
+      print(); 
+      
+      std::cout << std::endl << std::endl
+		<< "1.Insert item in front" << std::endl
+		<< "2.Insert item in end" << std::endl
+		<< "3.Insert item at the selected location" << std::endl
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
       std::cin >> what_to_do;
-      
+  
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
-	    return;
+	    return; 
 	  }; break;
 	  
-	case 1: // Вставляем один элемент
+	case 1: // Вставка элемента в начало
 	  {
-	    
+	    insert_item(0);
 	  }; break;
 	  
-	case 2: // Вставляем несколько элементов
+	case 2: // Вставка элемента в конец
 	  {
-	    
+	    insert_item(size);
+	  }; break;
+	  
+	case 3: // Вставка элемента в выбранном месте
+	  {
+	    int pos = size;
+	    std::cout << "Select position from 1 to " << size+1 << ": ";
+	    std::cin >> pos;
+	    --pos;
+
+	    if (pos < 0 || size < pos)
+	      {
+		std::cerr << std::endl << "Not guess, buddy!" << std::endl;
+		break;
+	      }
+
+	    insert_item(pos);
 	  }; break;
 	}
     }
 }
 
 
-void Mass::delete_item() // Удаляем элемент
+void Mass::delete_item(int pos_del) // Удаляем элемент
 {
+  if (size == 0 || arr == nullptr) // Если пришёл пустой массив
+    {
+      std::cout << std::endl << "The array is empty! There is nothing to delete!" << std::endl;
+      return;
+    }
   
+  if(size == 1) // Удаляем последний оставшийся элемент
+    {
+      delete[] arr;
+      arr = nullptr;
+    }
+  else // Удаляем элемент в нужном месте
+    {
+      int *temp = new int[size-1];
+      
+      for (int i = 0, j = 0; i < size-1; ++i) // Копирует существующие элементы, проходя мимо удалённого
+	{
+	  if (i == pos_del) ++j;
+	  temp[i] = arr[j];
+	  ++j;
+	}
+      
+      delete[] arr;
+      arr = temp;
+      temp = nullptr;;
+    }
+  
+  --size;
 }
 
 
 void Mass::menu_delete_items() // Меню удаления элементов
 {
-  int what_to_do = 0;
-
-  std::cout << std::endl;
-  print(); 
-  std::cout << std::endl;
+  int what_to_do = -1;
   
-  while(1)
-    {
-      std::cout << std::endl
-		<< "1.Delete one element" << std::endl
-		<< "2.Delete multiple elements" << std::endl
+  while(what_to_do != 0)
+    {      
+      std::cout << std::endl;
+      print(); 
+      
+      std::cout << std::endl << std::endl
+		<< "1.Delete item in front" << std::endl
+		<< "2.Delete item in end" << std::endl
+		<< "3.Delete item at the selected location" << std::endl
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
@@ -125,17 +188,39 @@ void Mass::menu_delete_items() // Меню удаления элементов
 	{
 	case 0: // Выбегаем
 	  {
-	    return;
+	    return; 
 	  }; break;
 	  
-	case 1: // 
+	case 1: // Удаление элемента в начале
 	  {
-	    
+	    delete_item(0);
 	  }; break;
 	  
-	case 2: //
+	case 2: // Удаление элемента в конце
 	  {
+	    delete_item(size);
+	  }; break;
+	  
+	case 3: // Удаление элемента в выбранном месте
+	  {
+	    if (size == 0)
+	      {
+		std::cerr << std::endl << "What are you going to delete here?"; // Что ты тут собрался удалять?!
+		break;
+	      }
 	    
+	    int pos = size;
+	    std::cout << "Select position from 1 to " << size << ": ";
+	    std::cin >> pos;
+	    --pos;
+	    
+	    if (pos < 0 || size < pos)
+	      {
+		std::cerr << std::endl << "Not guess, buddy!" << std::endl;
+		break;
+	      }
+	    
+	    delete_item(pos);
 	  }; break;
 	}
     }
@@ -150,40 +235,7 @@ void Mass::find_item() // Ищем элемент
 
 void Mass::menu_find_items() // Меню поиска элементов
 {
-  int what_to_do = 0;
-
-  std::cout << std::endl;
-  print(); 
-  std::cout << std::endl;
   
-  while(1)
-    {
-      std::cout << std::endl
-		<< "1.Find one element" << std::endl
-		<< "2.Find multiple elements" << std::endl
-		<< "0.Back" << std::endl << std::endl
-		<< "Select action: ";
-      
-      std::cin >> what_to_do;
-      
-      switch(what_to_do)
-	{
-	case 0: // Выбегаем
-	  {
-	    return;
-	  }; break;
-	  
-	case 1: // 
-	  {
-	    
-	  }; break;
-	  
-	case 2: //
-	  {
-	    
-	  }; break;
-	}
-    }
 }
 
 
@@ -195,40 +247,7 @@ void Mass::replace_item() // Заменяем элемент
 
 void Mass::menu_replace_items() // Меню замены элементов
 {
-  int what_to_do = 0;
-
-  std::cout << std::endl;
-  print(); 
-  std::cout << std::endl;
   
-  while(1)
-    {
-      std::cout << std::endl
-		<< "1.Replace one element" << std::endl
-		<< "2.Replace multiple elements" << std::endl
-		<< "0.Back" << std::endl << std::endl
-		<< "Select action: ";
-      
-      std::cin >> what_to_do;
-      
-      switch(what_to_do)
-	{
-	case 0: // Выбегаем
-	  {
-	    return;
-	  }; break;
-	  
-	case 1: // 
-	  {
-	    
-	  }; break;
-	  
-	case 2: //
-	  {
-	    
-	  }; break;
-	}
-    }
 }
 
 

@@ -9,8 +9,8 @@ class Mass
   int size = 0;
 
   void create_array(); // Создаём массив
-  void insert_item(); // Добавляем элемент
-  void delete_item(); // Удаляем элемент
+  void insert_item(int pos_add); // Добавляем элемент
+  void delete_item(int pos_del); // Удаляем элемент
   void find_item(); // Ищем элемент
   void replace_item(); // Заменяем элемент
   

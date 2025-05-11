@@ -5,7 +5,7 @@ void delete_mass(Mass **main_mass, int &size_mass, int pos_del) // 2.Удаля�
 {
     if (size_mass == 0 || *main_mass == nullptr) // Если пришёл пустой массив
       {
-	std::cout << std::endl << "The array is empty! There is nothing to delete!" << std::endl;
+	std::cerr << std::endl << "The array is empty! There is nothing to delete!" << std::endl;
 	return;
       }
 
@@ -77,8 +77,9 @@ void menu_delete_mass(Mass **main_mass, int &size_mass) // 1.Меню удале
 	      }
 	    
 	    int pos = size_mass;
-	    std::cout << "Select position from 0 to " << size_mass << ":";
+	    std::cout << "Select position from 1 to " << size_mass << ":";
 	    std::cin >> pos;
+	    --pos;
 
 	    if (pos < 0 || size_mass < pos)
 	      {

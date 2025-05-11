@@ -76,8 +76,9 @@ void menu_create_mass(Mass **main_mass, int &size_mass) // 1.Меню созда
 	case 3: // Создаём массив в выбранном месте
 	  {
 	    int pos = size_mass;
-	    std::cout << "Select position from 0 to " << size_mass << ":";
+	    std::cout << "Select position from 1 to " << size_mass+1 << ":";
 	    std::cin >> pos;
+	    --pos;
 
 	    if (pos < 0 || size_mass < pos)
 	      {
