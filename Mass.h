@@ -13,6 +13,7 @@ class Mass
   void delete_item(int pos_del); // Удаляем элемент
   void find_item(); // Ищем элемент
   void replace_item(); // Заменяем элемент
+  void quick_sort(int left, int right); // Быстрая сортировка
   
 public:
   void initialization(); // Начальная инициализация
@@ -21,7 +22,7 @@ public:
   void menu_find_items(); // Меню поиска элементов
   void menu_replace_items(); // Меню замены элементов
   void sort_items(); // Сортируем элементы
-  void mix_items(); // Перемешиваем элементы
+  void shuffling_items(); // Перемешиваем элементы
   void print(); // Вывод массива на экран
 
   Mass &operator= (Mass &mass);

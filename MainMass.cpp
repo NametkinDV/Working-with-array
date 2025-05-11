@@ -117,7 +117,7 @@ void Main_mass::create() // Запуск работы с массивами
 	case 8: // Перемешиваем элементы
 	  {
 	    int select = select_arr();
-	    if (select != -1) main_arr[select].mix_items();
+	    if (select != -1) main_arr[select].shuffling_items();
 	  }; break;  
 	}
     }

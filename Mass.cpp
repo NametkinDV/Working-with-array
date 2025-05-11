@@ -41,7 +41,12 @@ void Mass::initialization() // Начальная инициализация
       
     case 3: // Вводим с клавиатуры
       {
-	
+	create_array();
+	for (int i = 0; i < size; ++i)
+	  {
+	    std::cout << "Enter element number " << i+1 << ": ";
+	    std::cin >> arr[i];
+	  }
       }; break;
       
     case 4: // Читаем из файла
@@ -251,15 +256,45 @@ void Mass::menu_replace_items() // Меню замены элементов
 }
 
 
-void Mass::sort_items() // Сортируем элементы
+void Mass::quick_sort(int left, int right) // Быстрая сортировка
 {
-  
+  if (left >= right) return;
+
+  int mid = arr[(right + left)/2];
+  int l = left, r = right;
+
+  while (l <= r)
+    {
+      while (arr[l] < mid) l += 1;
+      while (mid < arr[r]) r -= 1;
+
+      if (l <= r)
+	{
+	  std::swap(arr[l], arr[r]);
+	  ++l;
+	  --r;
+	}
+    }
+  if (l < size) quick_sort(l, right);
+  if (0 < r) quick_sort(left, r);
 }
 
 
-void Mass::mix_items() // Перемешиваем элементы
+void Mass::sort_items() // Сортируем элементы
 {
-  
+  quick_sort(0, size-1);
+}
+
+
+void Mass::shuffling_items() // Перемешиваем элементы
+{
+  srand(std::time(0));
+
+  for (int i = size-1; 0 < i; --i)
+    {
+      int j = rand() % i;
+      std::swap(arr[i], arr[j]);
+    }
 }
 
 void Mass::print() // Вывод массива на экран
