@@ -1,15 +1,13 @@
 #include "Mass.h"
 
 
-int Mass::get_num_of_elements() // Получает стартовое количество элементов
+void Mass::create_array() // Создаём массив
 {
-  int num_of_elements = 0;
-
   std::cout << std::endl
 	    << "Specify the number of elements: ";
-  std::cin >> num_of_elements;
+  std::cin >> size;
 
-      return num_of_elements;
+  arr = new int[size];
 }
 
 
@@ -30,15 +28,15 @@ void Mass::initialization() // Начальная инициализация
     {       	  
     case 1: // Заполняем тривиально
       {
-	size = get_num_of_elements();
-	arr = new int[size];
-	
+	create_array();
 	for (int i = 0; i < size; ++i) arr[i] = i+1;
       }; break;
       
     case 2: // Генерируем рандомно
       {
-	
+	srand(std::time(0));
+	create_array();
+	for (int i = 0; i < size; ++i) arr[i] = rand() % 100 + 1; // В пределах от 0 до 100 
       }; break;
       
     case 3: // Вводим с клавиатуры
@@ -54,27 +52,183 @@ void Mass::initialization() // Начальная инициализация
 }
 
 
-void Mass::insert_items() // Добавляем элементы
+void Mass::insert_item() // Добавляем элемент
+{
+
+}
+
+
+void Mass::menu_insert_items() // Меню добавления элементов
+{
+  int what_to_do = 0;
+
+  std::cout << std::endl;
+  print(); 
+  std::cout << std::endl;
+  
+  while(1)
+    {
+      std::cout << std::endl
+		<< "1.Insert one element" << std::endl
+		<< "2.Insert multiple elements" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return;
+	  }; break;
+	  
+	case 1: // Вставляем один элемент
+	  {
+	    
+	  }; break;
+	  
+	case 2: // Вставляем несколько элементов
+	  {
+	    
+	  }; break;
+	}
+    }
+}
+
+
+void Mass::delete_item() // Удаляем элемент
 {
   
 }
 
 
-void Mass::delete_items() // Удаляем элементы
+void Mass::menu_delete_items() // Меню удаления элементов
+{
+  int what_to_do = 0;
+
+  std::cout << std::endl;
+  print(); 
+  std::cout << std::endl;
+  
+  while(1)
+    {
+      std::cout << std::endl
+		<< "1.Delete one element" << std::endl
+		<< "2.Delete multiple elements" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return;
+	  }; break;
+	  
+	case 1: // 
+	  {
+	    
+	  }; break;
+	  
+	case 2: //
+	  {
+	    
+	  }; break;
+	}
+    }
+}
+
+
+void Mass::find_item() // Ищем элемент
 {
   
 }
 
 
-void Mass::seek_items() // Ищем элементы
+void Mass::menu_find_items() // Меню поиска элементов
+{
+  int what_to_do = 0;
+
+  std::cout << std::endl;
+  print(); 
+  std::cout << std::endl;
+  
+  while(1)
+    {
+      std::cout << std::endl
+		<< "1.Find one element" << std::endl
+		<< "2.Find multiple elements" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return;
+	  }; break;
+	  
+	case 1: // 
+	  {
+	    
+	  }; break;
+	  
+	case 2: //
+	  {
+	    
+	  }; break;
+	}
+    }
+}
+
+
+void Mass::replace_item() // Заменяем элемент
 {
   
 }
 
 
-void Mass::replace_items() // Заменяем элементы
+void Mass::menu_replace_items() // Меню замены элементов
 {
+  int what_to_do = 0;
+
+  std::cout << std::endl;
+  print(); 
+  std::cout << std::endl;
   
+  while(1)
+    {
+      std::cout << std::endl
+		<< "1.Replace one element" << std::endl
+		<< "2.Replace multiple elements" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return;
+	  }; break;
+	  
+	case 1: // 
+	  {
+	    
+	  }; break;
+	  
+	case 2: //
+	  {
+	    
+	  }; break;
+	}
+    }
 }
 
 

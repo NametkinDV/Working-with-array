@@ -3,7 +3,12 @@
 
 int Main_mass::select_arr() // Выбор массива для обработки
 {
-  if (size_of_array == 0) { return -1; } // Если элементов нет
+  if (size_of_array == 0) // Если элементов нет
+    {
+      std::cerr << std::endl
+		<< "There is nothing to choose from" << std::endl;
+      return -1;
+    } 
   if (size_of_array == 1) { return 0; } // Если элемент единственный
   
   int select_arr = 0;
@@ -15,7 +20,7 @@ int Main_mass::select_arr() // Выбор массива для обработк
       
       std::cin >> select_arr;
       
-      if (0 <= select_arr && select_arr < size_of_array) return select_arr;
+      if (1 <= select_arr && select_arr <= size_of_array) return select_arr-1;
     }
   return -1; // На всякий случай
 }
@@ -82,25 +87,25 @@ void Main_mass::create() // Запуск работы с массивами
 	case 3: // Добавляем элементы
 	  {
 	    int select = select_arr();
-	    if (select != -1) main_arr[select].insert_items();
+	    if (select != -1) main_arr[select].menu_insert_items();
 	  }; break;
 	  
 	case 4: // Удаляем элементы
 	  {
 	    int select = select_arr();
-	    if (select != -1) main_arr[select].delete_items();
+	    if (select != -1) main_arr[select].menu_delete_items();
 	  }; break;
 	  
 	case 5: // Ищем элементы
 	  {
 	    int select = select_arr();
-	    if (select != -1) main_arr[select].seek_items();
+	    if (select != -1) main_arr[select].menu_find_items();
 	  }; break;
 	  
 	case 6: // Заменяем элементы
 	  {
 	    int select = select_arr();
-	    if (select != -1) main_arr[select].replace_items();
+	    if (select != -1) main_arr[select].menu_replace_items();
 	  }; break;
 	  
 	case 7: // Сортируем элементы

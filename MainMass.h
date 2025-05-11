@@ -1,5 +1,5 @@
-#ifndef MAINMASS_H
-#define MAINMASS_H
+#ifndef MainMass_H
+#define MainMass_H
 
 #include <iostream>
 #include "Mass.h"
