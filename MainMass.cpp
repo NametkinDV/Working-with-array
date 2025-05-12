@@ -56,10 +56,10 @@ void Main_mass::create() // Запуск работы с массивами
 		<< "2.Delete mass" << std::endl
 		<< "3.Insert items" << std::endl
 		<< "4.Delete items" << std::endl
-		<< "5.Seek items" << std::endl
+		<< "5.Find items" << std::endl
 		<< "6.Replace items" << std::endl
 		<< "7.Sort items" << std::endl
-		<< "8.Mix items" << std::endl
+		<< "8.Shuffling items" << std::endl
 		<< "0.Exit" << std::endl << std::endl
 		<< "Select action: ";
       

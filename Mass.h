@@ -11,8 +11,7 @@ class Mass
   void create_array(); // Создаём массив
   void insert_item(int pos_add); // Добавляем элемент
   void delete_item(int pos_del); // Удаляем элемент
-  void find_item(); // Ищем элемент
-  void replace_item(); // Заменяем элемент
+  int find_item(int find, int mode, int pos_start); // Ищем элемент
   void quick_sort(int left, int right); // Быстрая сортировка
   
 public:

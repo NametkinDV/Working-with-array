@@ -232,27 +232,207 @@ void Mass::menu_delete_items() // Меню удаления элементов
 }
 
 
-void Mass::find_item() // Ищем элемент
+int Mass::find_item(int find, int mode = 0, int pos_start = 0) // Ищем элемент
 {
+  if (mode == 0 && pos_start < size) // Ищем с заданного начала
+    for (int i = pos_start; i < size; ++i) if (arr[i] == find) return i;	
   
+  if (mode == 1) // Ищем с конца
+    for (int i = size-1; 0 <= i; --i) if (arr[i] == find) return i;	
+
+    return -1;
 }
 
 
 void Mass::menu_find_items() // Меню поиска элементов
 {
+  int what_to_do = 0, what_to_find = 0;
   
-}
+  while(1)
+    {      
+      std::cout << std::endl;
+      print(); 
+      
+      std::cout << std::endl << std::endl
+		<< "1.Find the first occurrence of an element" << std::endl
+		<< "2.Find the last occurrence of an element" << std::endl
+		<< "3.Find all occurrences of an element" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
 
+      if (0 < what_to_do && what_to_do <=3)
+	{
+	  std::cout << "Enter an item to search for: ";
+	  std::cin >> what_to_find;
+	}
+      
+      switch(what_to_do)
+	{
+	case 0: // Выбегаем
+	  {
+	    return; 
+	  }; break;
+	  
+	case 1: // Ищем первое вхождение элемента
+	  {
+	    int res = find_item(what_to_find);
 
-void Mass::replace_item() // Заменяем элемент
-{
-  
+	    if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
+	    else std::cout << std::endl << "Element position: " << ++res << std::endl;
+	  }; break;
+	  
+	case 2: // Ищем последнее вхождение элемента
+	  {	   
+	    int res = find_item(what_to_find, 1);
+
+	    if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
+	    else std::cout << std::endl << "Element position: " << ++res << std::endl;
+	  }; break;
+	  
+	case 3: // Ищем все вхождения элемента
+	  {	   
+	    std::cout << std::endl << "Element positions: ";
+	    int res = 0, count = 0;
+	    
+	    while(1)
+	      {
+		res = find_item(what_to_find, 0, res);
+		if (res == -1) break;		  
+
+		std::cout << ++res << " ";
+		++count;		  
+	      }
+	    if (count == 0) std::cout << std::endl << "Element not found" << std::endl;
+	    std::cout << std::endl;
+	  }; break;
+	}
+    }
 }
 
 
 void Mass::menu_replace_items() // Меню замены элементов
 {
+  int what_to_do = -1, what_to_replace = 0, new_item = 0;
   
+  while(1)
+    {
+      std::cout << std::endl;
+      print(); 
+      
+      std::cout << std::endl << std::endl
+		<< "1.Set element by index" << std::endl
+		<< "2.Set element by value" << std::endl
+		<< "0.Back" << std::endl << std::endl
+		<< "Select action: ";
+      
+      std::cin >> what_to_do;
+
+      switch(what_to_do)
+	{
+	case 0:
+	  {
+	    return;
+	  } break;
+
+	case 1:
+	  {
+	    std::cout << std::endl << "Enter replacement index: ";
+	    int index = 0;
+	    std::cin >> index;
+
+	    if (index < 0 || size <= index)
+	      {
+		std::cerr << std::endl << "Out of range" << std::endl;
+		break;
+	      }
+
+	    else
+	      {
+		std::cout << "Enter a new element: ";
+		std::cin >> new_item;
+		arr[index] = new_item;
+	      }
+	  } break;
+
+	case 2:
+	  {
+	    std::cout << std::endl;
+	    print();
+	    what_to_do = -1;
+	    
+	    std::cout << std::endl << std::endl
+		      << "1.Replace first occurrence of an element" << std::endl
+		      << "2.Replace last occurrence of an element" << std::endl
+		      << "3.Replace all occurrences of an element" << std::endl
+		      << "0.Back" << std::endl << std::endl
+		      << "Select action: ";
+	    
+	    std::cin >> what_to_do;
+	    
+	    if (0 < what_to_do && what_to_do <=3)
+	      {
+		std::cout << "Enter an item to replace for: ";
+		std::cin >> what_to_replace;
+	      }
+	    
+	    switch(what_to_do)
+	      {
+	      case 0: // Выбегаем
+		{
+		  return; 
+		}; break;
+		
+	      case 1: // Меняем первое вхождение элемента
+		{
+		  int res = find_item(what_to_replace);
+		  
+		  if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
+		  else
+		    {
+		      std::cout << "Enter a new element: ";
+		      std::cin >> new_item;
+		      arr[res] = new_item;
+		    }
+		}; break;
+		
+	      case 2: // Меняем последнее вхождение элемента
+		{	   
+		  int res = find_item(what_to_replace, 1);
+		  
+		  if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
+		  else
+		    {
+		      std::cout << "Enter a new element: ";
+		      std::cin >> new_item;
+		      arr[res] = new_item;
+		    }
+		}; break;
+		
+	      case 3: // Меняем все вхождения элемента
+		{	   
+		  int res = 0, count = 0;
+
+		  std::cout << "Enter a new element: ";
+		  std::cin >> new_item;
+		  
+		  while(1)
+		    {
+		      res = find_item(what_to_replace, 0, res);
+		      if (res == -1) break;		  
+		      
+		      arr[res] = new_item;
+		      
+		      ++count;		  
+		    }
+		  if (count == 0) std::cout << std::endl << "Element not found" << std::endl;
+		  std::cout << std::endl;
+		}; break;
+	      }
+	  }
+	}
+    }
 }
 
 
@@ -308,6 +488,13 @@ void Mass::print() // Вывод массива на экран
 
 Mass &Mass::operator=(Mass &mass)
 {
+  if (this->size != 0) // Если в получающем элементе что-то было
+    {
+      delete[] this->arr;
+      this->arr = nullptr;
+      this->size = 0;
+    }
+    
   this->size = mass.size;
   this->arr = new int[this->size];
 
