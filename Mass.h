@@ -1,6 +1,7 @@
 #ifndef Mass_h
 #define Mass_h
 #include <iostream>
+#include <fstream>
 #include <ctime>
 
 class Mass
@@ -9,6 +10,7 @@ class Mass
   int size = 0;
 
   void create_array(); // Создаём массив
+  void open_file(std::ifstream **input, int &file_size); // Открытие файла и определение его размера
   void insert_item(int pos_add); // Добавляем элемент
   void delete_item(int pos_del); // Удаляем элемент
   int find_item(int find, int mode, int pos_start); // Ищем элемент

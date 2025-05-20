@@ -38,9 +38,15 @@ void delete_mass(Mass **main_mass, int &size_mass, int pos_del) // 2.Удаля�
 
 void menu_delete_mass(Mass **main_mass, int &size_mass) // 1.Меню удаления массива
 {
+  if (size_mass == 1) // Если остался последний массив
+    {
+      delete_mass(main_mass, size_mass, 0);
+      return;
+    }
+  
   int what_to_do = 0;
   
-  while(1)
+  while(1) // Если имеется несколько массивов
     {
       std::cout << std::endl
 		<< "1.Delete array in front" << std::endl

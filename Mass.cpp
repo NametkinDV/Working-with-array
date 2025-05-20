@@ -3,11 +3,53 @@
 
 void Mass::create_array() // Создаём массив
 {
-  std::cout << std::endl
-	    << "Specify the number of elements: ";
-  std::cin >> size;
-
+  if (size == 0)
+    {
+      std::cout << std::endl
+		<< "Specify the number of elements: ";
+      std::cin >> size;
+    }
+  
   arr = new int[size];
+}
+
+
+void Mass::open_file(std::ifstream **input, int &file_size) // Открытие файла и определение его размера
+{
+  std::string file_name = "";
+
+  std::cout << std::endl
+	    << "Enter file name: ";
+  std::cin >> file_name;
+
+  std::ifstream *file = nullptr;
+  file = new std::ifstream(file_name.c_str()); // Открываем файл
+
+  if (file->fail()) // Упс, что-то пошло не так
+    {
+      std::cerr << std::endl
+		<< "Error opening file" << std::endl;
+
+      delete file;
+      *input = nullptr;
+      file_size = 0;
+      return;
+    }
+  
+  while (!file->eof()) // Проходим весь файл и считаем элементы
+    {
+      int temp = 0;
+      *file >> temp;
+      
+      if (file->fail()) break; // Если встретили некорректный элемент
+      else ++file_size;
+    }
+
+  file->clear();
+  file->seekg(0); // Ставим позицию чтения на начало
+
+  *input = file;
+  file = nullptr;
 }
 
 
@@ -51,7 +93,22 @@ void Mass::initialization() // Начальная инициализация
       
     case 4: // Читаем из файла
       {
+	std::ifstream *file = nullptr;
+	int file_size = 0;
 	
+	open_file(&file, file_size);
+
+	if (0 < file_size)
+	  {
+	    size = file_size;
+	    create_array();
+	    
+	    for (int i = 0; i < size; ++i) // Переносим данные из файла в массив
+	      {
+		if (file->fail()) break;
+		*file >> arr[i];
+	      }
+	  }
       }; break;
     }
 }
