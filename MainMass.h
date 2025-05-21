@@ -7,8 +7,8 @@
 
 class Main_mass
 {
-  Mass *main_arr = nullptr;
-  int size = 0;
+  Mass *main_arr = nullptr; // Массив элементов
+  int size = 0; // Размер массива
 
   void create_mass(int pos_add); // Создаём массив
   void menu_create_mass(); // Меню создания массива

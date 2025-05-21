@@ -53,6 +53,8 @@ void Main_mass::menu_create_mass() // Меню создания массива
   
   while(1) // Если уже есть созданные массивы
     {
+      print_mass();
+      
       std::cout << std::endl
 		<< "1.Create array in front" << std::endl
 		<< "2.Create array in end" << std::endl
@@ -107,7 +109,7 @@ void Main_mass::delete_mass(int pos_del) // Удаляем массив
 	return;
       }
 
-    if(size == 1) // Удаляем последний оставшийся массив
+    if (size == 1) // Удаляем последний оставшийся массив
       {
 	delete[] main_arr;
 	main_arr = nullptr;
@@ -136,7 +138,7 @@ void Main_mass::delete_mass(int pos_del) // Удаляем массив
 
 void Main_mass::menu_delete_mass() // Меню удаления массива
 {
-  if (size == 1) // Если остался последний массив
+  if (size < 2) // Если остался последний массив
     {
       delete_mass(0);
       return;
@@ -144,8 +146,10 @@ void Main_mass::menu_delete_mass() // Меню удаления массива
   
   int what_to_do = 0;
   
-  while(1) // Если имеется несколько массивов
+  while(1 < size) // Если имеется несколько массивов
     {
+      print_mass();
+      
       std::cout << std::endl
 		<< "1.Delete array in front" << std::endl
 		<< "2.Delete array in end" << std::endl
@@ -232,7 +236,7 @@ int Main_mass::select_arr() // Выбор массива для обработк
     }
   return -1; // На всякий случай
 }
-
+  
 
 void Main_mass::print_mass() // Вывод массивов на экран
 {
@@ -253,7 +257,7 @@ void Main_mass::print_mass() // Вывод массивов на экран
 
 void Main_mass::create() // Запуск работы с массивами 
 {
-  int what_to_do = 0;
+  int what_to_do = 0, select = 0;
   
   while(1)
     {
@@ -272,6 +276,12 @@ void Main_mass::create() // Запуск работы с массивами
 		<< "Select action: ";
       
       std::cin >> what_to_do;
+
+      if (2 < what_to_do && what_to_do <= 8) // Для пунктов 2-8 просим выбрать нужный массив
+	{
+	  select = select_arr();
+	  if (select == -1) continue;
+	}
       
       switch(what_to_do)
 	{
@@ -294,38 +304,32 @@ void Main_mass::create() // Запуск работы с массивами
 	  
 	case 3: // Добавляем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].menu_insert_items();
+	    main_arr[select].menu_insert_items();
 	  }; break;
 	  
 	case 4: // Удаляем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].menu_delete_items();
+	    main_arr[select].menu_delete_items();
 	  }; break;
 	  
 	case 5: // Ищем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].menu_find_items();
+	    main_arr[select].menu_find_items();
 	  }; break;
 	  
 	case 6: // Заменяем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].menu_replace_items();
+	    main_arr[select].menu_replace_items();
 	  }; break;
 	  
 	case 7: // Сортируем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].sort_items();
+	    main_arr[select].sort_items();
 	  }; break;
 	  
 	case 8: // Перемешиваем элементы
 	  {
-	    int select = select_arr();
-	    if (select != -1) main_arr[select].shuffling_items();
+	    main_arr[select].shuffling_items();
 	  }; break;  
 	}
     }

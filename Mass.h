@@ -4,10 +4,12 @@
 #include <fstream>
 #include <ctime>
 
+
 class Mass
 {
-  int *arr = nullptr;
-  int size = 0;
+  int *arr = nullptr; // Массив элементов
+  bool *changes = nullptr; // Массив изменений
+  int size = 0; // Размер массива
 
   void create_array(); // Создаём массив
   void open_file(std::ifstream **input, int &file_size); // Открытие файла и определение его размера
@@ -24,6 +26,7 @@ public:
   void menu_replace_items(); // Меню замены элементов
   void sort_items(); // Сортируем элементы
   void shuffling_items(); // Перемешиваем элементы
+  void clear_changes(); // Обнуление индикаторов предыдущих изменений
   void print(); // Вывод массива на экран
 
   Mass &operator= (Mass &mass);
