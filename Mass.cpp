@@ -11,7 +11,7 @@ void Mass::create_array() // Создаём массив
     }
   
   arr = new int[size];
-  changes = new bool[size];
+  changes = new int[size];
 }
   
 
@@ -75,18 +75,28 @@ void Mass::initialization() // Начальная инициализация
 	for (int i = 0; i < size; ++i)
 	  {
 	    arr[i] = i+1;
-	    changes[i] = true;
+	    changes[i] = CREATE;
 	  }
       }; break;
       
     case 2: // Генерируем рандомно
       {
+	int min = 0, max = -1;
+	std::cout << "Please enter the minimum value: ";
+	std::cin >> min;
+
+	while (max < min) // Убеждаемся что минимум меньше или равен максимуму
+	  {
+	    std::cout << std::endl <<  "Please enter the maximum value: ";
+	    std::cin >> max;
+	  }
+	
 	srand(std::time(0));
 	create_array();
 	for (int i = 0; i < size; ++i)
 	  {
-	    arr[i] = rand() % 100 + 1; // В пределах от 0 до 100
-	    changes[i] = true;
+	    arr[i] = rand() % (max - min + 1) + min; // В пределах от min до max
+	    changes[i] = CREATE;
 	  }
       }; break;
       
@@ -97,7 +107,7 @@ void Mass::initialization() // Начальная инициализация
 	  {
 	    std::cout << "Enter element number " << i+1 << ": ";
 	    std::cin >> arr[i];
-	    changes[i] = true;
+	    changes[i] = CREATE;
 	  }
       }; break;
       
@@ -117,7 +127,7 @@ void Mass::initialization() // Начальная инициализация
 	      {
 		if (file->fail()) break;
 		*file >> arr[i];
-		changes[i] = true;
+		changes[i] = CREATE;
 	      }
 	  }
       }; break;
@@ -128,7 +138,7 @@ void Mass::initialization() // Начальная инициализация
 void Mass::insert_item(int pos_add) // Добавляем элемент
 {  
    int *temp = new int[size+1];
-   bool *temp_ch = new bool[size+1];
+   int *temp_ch = new int[size+1];
    
       for (int i = 0, j = 0; i <= size; ++i) // Копирует существующие элементы и инициализирует созданный
 	{
@@ -136,12 +146,12 @@ void Mass::insert_item(int pos_add) // Добавляем элемент
 	    {
 	      std::cout << "Enter a new element: ";
 	      std::cin >> temp[i]; // Инициализируем новый элемент
-	      temp_ch[i] = true;
+	      temp_ch[i] = INSERT;
 	    } 
 	  else
 	    {
 	      temp[i] = arr[j]; // Копирует созданные
-	      temp_ch[i] = false;
+	      temp_ch[i] = NONE;
 	      ++j;
 	    }
 	}
@@ -229,23 +239,25 @@ void Mass::delete_item(int pos_del) // Удаляем элемент
   if (size == 1) // Удаляем последний оставшийся элемент
     {
       delete[] arr;
-      delete[] changes;
       arr = nullptr;
-      changes = nullptr;
+      changes[0] = DELETE_LAST; // Массив с изменениями удаляется после вывода
     }
 
   else // Удаляем элемент в нужном месте
     {
       int *temp = new int[size-1];
-      bool *temp_ch = new bool[size-1];
+      int *temp_ch = new int[size-1];
       
       for (int i = 0, j = 0; i < size-1; ++i) // Копирует существующие элементы, проходя мимо удалённого
 	{
 	  if (i == pos_del) ++j;
 	  temp[i] = arr[j];
-	  temp_ch[i] = false;
+	  temp_ch[i] = NONE;
 	  ++j;
 	}
+      if (pos_del < size-1) temp_ch[pos_del] = DELETE_FORWARD;
+      else temp_ch[pos_del-1] = DELETE_BACK;
+      
       
       delete[] arr;
       delete[] changes;
@@ -297,7 +309,7 @@ void Mass::menu_delete_items() // Меню удаления элементов
 	  
 	case 2: // Удаление элемента в конце
 	  {
-	    delete_item(size);
+	    delete_item(size-1);
 	  }; break;
 	  
 	case 3: // Удаление элемента в выбранном месте
@@ -371,22 +383,33 @@ void Mass::menu_find_items() // Меню поиска элементов
 	  
 	case 1: // Ищем первое вхождение элемента
 	  {
+	    clear_changes();
 	    int res = find_item(what_to_find);
 
 	    if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
-	    else std::cout << std::endl << "Element position: " << ++res << std::endl;
+	    else
+	      {
+		changes[res] = FIND;
+		std::cout << std::endl << "Element position: " << ++res << std::endl;		
+	      }
 	  }; break;
 	  
 	case 2: // Ищем последнее вхождение элемента
-	  {	   
+	  {
+	    clear_changes();
 	    int res = find_item(what_to_find, 1);
 
 	    if (res == -1) std::cout << std::endl << "Element not found" << std::endl;
-	    else std::cout << std::endl << "Element position: " << ++res << std::endl;
+	    else
+	      {
+		changes[res] = FIND;
+		std::cout << std::endl << "Element position: " << ++res << std::endl;
+	      }
 	  }; break;
 	  
 	case 3: // Ищем все вхождения элемента
-	  {	   
+	  {
+	    clear_changes();
 	    std::cout << std::endl << "Element positions: ";
 	    int res = 0, count = 0;
 	    
@@ -395,6 +418,7 @@ void Mass::menu_find_items() // Меню поиска элементов
 		res = find_item(what_to_find, 0, res);
 		if (res == -1) break;		  
 
+		changes[res] = FIND;
 		std::cout << ++res << " ";
 		++count;		  
 	      }
@@ -432,7 +456,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 
 	case 1:
 	  {
-	    std::cout << std::endl << "Enter replacement index: ";
+	    std::cout << std::endl << "Enter replacement index from 0 to " << size-1 << ":";
 	    int index = 0;
 	    std::cin >> index;
 
@@ -448,7 +472,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 		std::cin >> new_item;
 		arr[index] = new_item;
 		clear_changes();
-		changes[index] = true;
+		changes[index] = REPLACE;
 	      }
 	  } break;
 
@@ -491,7 +515,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 		      std::cin >> new_item;
 		      arr[res] = new_item;
 		      clear_changes();
-		      changes[res] = true;
+		      changes[res] = REPLACE;
 		    }
 		}; break;
 		
@@ -506,7 +530,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 		      std::cin >> new_item;
 		      arr[res] = new_item;
 		      clear_changes();
-		      changes[res] = true;
+		      changes[res] = REPLACE;
 		    }
 		}; break;
 		
@@ -524,7 +548,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 		      if (res == -1) break;		  
 		      
 		      arr[res] = new_item;
-		      changes[res] = true;
+		      changes[res] = REPLACE;
 		      
 		      ++count;		  
 		    }
@@ -553,8 +577,8 @@ void Mass::quick_sort(int left, int right) // Быстрая сортировк�
       if (l <= r)
 	{
 	  std::swap(arr[l], arr[r]);
-	  changes[l] = true;
-	  changes[r] = true;
+	  changes[l] = SORT;
+	  changes[r] = SORT;
 	  ++l;
 	  --r;
 	}
@@ -580,8 +604,8 @@ void Mass::shuffling_items() // Перемешиваем элементы
     {
       int j = rand() % i;
       std::swap(arr[i], arr[j]);
-      changes[i] = true;
-      changes[j] = true;
+      changes[i] = SHUF;
+      changes[j] = SHUF;
     }
 }
 
@@ -592,20 +616,76 @@ void Mass::clear_changes() // Обнуление индикаторов пред
 }
 
 
-void Mass::print() // Вывод массива на экран
+void Mass::print() // Вывод массива на экран с индикацией изменений
 {
-  for(int i = 0; i < size; ++i)
+  if (changes == nullptr && arr == nullptr) return; // Если выводить нечего
+
+  std::cout << "{ ";
+  
+  if (changes != nullptr && changes[0] == DELETE_LAST) // Если все элементы удалены, но нужно пометить последний удалённый элемент
     {
-      if (changes[i] == true) std::cout << '|' << arr[i] << '|' << " ";
-      
-      else std::cout << arr[i] << " ";
+      	    std::cout << "| |";
+	    delete[] changes;
+	    changes = nullptr;
     }
+  
+  for(int i = 0; i < size; ++i) // Выводим элементы с индикацией
+    {
+      switch (changes[i])
+	{
+	case NONE:
+	  {
+	    std::cout << arr[i] << " ";
+	  } break;
+
+	case CREATE:
+	  {
+	    std::cout << '|' << arr[i] << '|' << " ";
+	  } break;
+
+	case DELETE_FORWARD:
+	  {
+	    std::cout << "| | " << arr[i] << " ";
+	  } break;
+
+	case DELETE_BACK:
+	  {
+	    std::cout << arr[i] << " | | ";
+	  } break;
+
+	case INSERT:
+	  {
+	    std::cout << '|' << arr[i] << '|' << " ";
+	  } break;
+
+	case FIND:
+	  {
+	    std::cout << '*' << arr[i] << '*' << " ";
+	  } break;
+
+	case REPLACE:
+	  {
+	    std::cout << '(' << arr[i] << ')' << " ";
+	  } break;
+
+	case SORT:
+	  {
+	    std::cout << '<' << arr[i] << '>' << " ";
+	  } break;
+
+	case SHUF:
+	  {
+	    std::cout << '#' << arr[i] << '#' << " ";
+	  } break;
+	}
+    }
+    std::cout << "}";
 }
 
 
 Mass &Mass::operator=(Mass &mass)
 {
-  if (this->size != 0) // Если в получающем элементе что-то было
+  if (this->size != 0) // Если в получающем массиве что-то было
     {
       delete[] this->arr;
       delete[] this->changes;
@@ -616,14 +696,21 @@ Mass &Mass::operator=(Mass &mass)
     
   this->size = mass.size;
   this->arr = new int[this->size];
-  this->changes = new bool[this->size];
+  this->changes = new int[this->size];
 
-  for (int i = 0; i < size; ++i) this->arr[i] = mass.arr[i];
+  for (int i = 0; i < size; ++i)
+    {
+      this->arr[i] = mass.arr[i];
+      this->changes[i] = mass.changes[i];
+    }
 
-  delete[] mass.arr;
-  delete[] mass.changes;
-  mass.arr = nullptr;
-  mass.changes = nullptr;
-
+  if(mass.arr != nullptr && mass.changes != nullptr)
+    {
+      delete[] mass.arr;
+      delete[] mass.changes;
+      mass.arr = nullptr;
+      mass.changes = nullptr;
+    }
+  
   return *this;
 }

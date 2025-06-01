@@ -8,8 +8,9 @@
 class Mass
 {
   int *arr = nullptr; // Массив элементов
-  bool *changes = nullptr; // Массив изменений
+  int *changes = nullptr; // Массив изменений
   int size = 0; // Размер массива
+  enum change {NONE, CREATE, DELETE_FORWARD, DELETE_BACK, DELETE_LAST, INSERT, FIND, REPLACE, SORT, SHUF};
 
   void create_array(); // Создаём массив
   void open_file(std::ifstream **input, int &file_size); // Открытие файла и определение его размера
