@@ -12,7 +12,19 @@ void Main_mass::create_mass(int pos_add) // Создаём массив
   if (size == 0 && main_arr == nullptr) // Выделяем память под первый массив
     {
       main_arr = new Mass[1];
-      main_arr->initialization();
+
+      try{main_arr->initialization();}
+	catch(std::string error)
+	  {
+	    clear_screen();
+	    std::cerr << std::endl
+		      << error << std::endl;
+	    delete[] main_arr;
+	    main_arr = nullptr;
+
+	    return;
+	  }
+      
       ++size;
     }
 
@@ -22,7 +34,21 @@ void Main_mass::create_mass(int pos_add) // Создаём массив
       	
       for (int i = 0, j = 0; i <= size; ++i) // Копирует существующие массивы и инициализирует созданный
 	{
-	  if (i == pos_add) temp[i].initialization(); // Инициализируем новый массив
+	  if (i == pos_add) // Инициализируем новый массив
+	    {
+	      try{temp[i].initialization();}
+	      catch(std::string error)
+		{
+		  clear_screen();
+		  std::cerr << std::endl
+			    << error << std::endl;
+		  delete[] temp;
+		  temp = nullptr;
+		  
+		  return;
+		}
+	      
+	    }
 	  else
 	    {
 	      temp[i] = main_arr[j]; // Копирует созданные

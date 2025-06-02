@@ -37,13 +37,10 @@ void Mass::open_file(std::ifstream **input, int &file_size) // Открытие 
 
   if (file->fail()) // Упс, что-то пошло не так
     {
-      clear_screen();
-      std::cerr << std::endl
-		<< "Error opening file" << std::endl;
-
       delete file;
       *input = nullptr;
       file_size = 0;
+      throw std::string {"Error opening file"};
       return;
     }
   
@@ -936,13 +933,5 @@ Mass &Mass::operator=(Mass &mass)
       this->changes[i] = mass.changes[i];
     }
 
-  if(mass.arr != nullptr && mass.changes != nullptr)
-    {
-      delete[] mass.arr;
-      delete[] mass.changes;
-      mass.arr = nullptr;
-      mass.changes = nullptr;
-    }
-  
   return *this;
 }
