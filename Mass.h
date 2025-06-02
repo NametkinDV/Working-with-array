@@ -8,6 +8,12 @@
 #define LINUX
 //#define WIN
 
+#ifdef WIN
+#ifdef max
+#undef max
+#endif
+#endif
+
 class Mass
 {
   int *arr = nullptr;     // Массив элементов

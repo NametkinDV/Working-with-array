@@ -392,7 +392,9 @@ void Main_mass::clear_screen() // Очистка экрана для linux и wi
 {
   #ifdef LINUX
   system("clear");
-  #elif WIN
+  #endif
+
+  #ifdef WIN
   system("cls");
   #endif
 }

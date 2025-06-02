@@ -857,7 +857,6 @@ void Mass::print() // Вывод массива на экран с индика�
 }
 
 
-#ifdef LINUX
 std::string Mass::change_color(int color) // Изменение цвета текста
 {
   switch(color)
@@ -890,7 +889,6 @@ std::string Mass::change_color(int color) // Изменение цвета те�
 
   return "\033[0m";
 }
-#endif
 
 
 void Mass::get_int(int &var) // Получение числа от пользователя
@@ -909,7 +907,9 @@ void Mass::clear_screen() // Очистка экрана для linux и windows
 {
   #ifdef LINUX
   system("clear");
-  #elif WIN
+  #endif
+
+  #ifdef WIN
   system("cls");
   #endif
 }
