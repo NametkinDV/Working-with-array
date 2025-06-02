@@ -3,7 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include "limits"
 
+#define LINUX
+//#define WIN
 
 class Mass
 {
@@ -30,6 +33,8 @@ public:
   void clear_changes(); // Обнуление индикаторов предыдущих изменений
   void print(); // Вывод массива на экран
 
+  void get_int(int &var); // Получение числа от пользователя
+  void clear_screen(); // Очистка экрана для linux и windows
   Mass &operator= (Mass &mass);
 };
 

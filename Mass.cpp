@@ -5,9 +5,18 @@ void Mass::create_array() // Создаём массив
 {
   if (size == 0)
     {
-      std::cout << std::endl
-		<< "Specify the number of elements: ";
-      std::cin >> size;
+      while(size <= 0)
+	{
+	  std::cout << std::endl
+		    << "Specify the number of elements: ";
+	  
+	  try {get_int(size);}
+	  catch(std::string error)
+	    {
+	      clear_screen();
+	      std::cerr << error << std::endl << std::endl;
+	    }
+	}
     }
   
   arr = new int[size];
@@ -28,6 +37,7 @@ void Mass::open_file(std::ifstream **input, int &file_size) // Открытие 
 
   if (file->fail()) // Упс, что-то пошло не так
     {
+      clear_screen();
       std::cerr << std::endl
 		<< "Error opening file" << std::endl;
 
@@ -56,16 +66,25 @@ void Mass::open_file(std::ifstream **input, int &file_size) // Открытие 
 
 void Mass::initialization() // Начальная инициализация
 {
+  clear_screen();
   int what_to_do = 0;
   
-  std::cout << std::endl
-	    << "1.Fill trivially" << std::endl
-	    << "2.Generate randomly" << std::endl
-	    << "3.Enter array elements manually" << std::endl
-	    << "4.Read from file" << std::endl	     
-	    << "Select action: ";
-  
-  std::cin >> what_to_do;
+  while (what_to_do == 0)
+    {
+      std::cout << std::endl
+		<< "1.Fill trivially" << std::endl
+		<< "2.Generate randomly" << std::endl
+		<< "3.Enter array elements manually" << std::endl
+		<< "4.Read from file" << std::endl	     
+		<< "Select action: ";
+      
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	}
+    }
   
   switch(what_to_do)
     {       	  
@@ -83,12 +102,26 @@ void Mass::initialization() // Начальная инициализация
       {
 	int min = 0, max = -1;
 	std::cout << "Please enter the minimum value: ";
-	std::cin >> min;
+
+	try {get_int(min);}
+	catch(std::string error)
+	  {
+	    clear_screen();
+	    std::cerr << error << std::endl << std::endl;
+	    return;
+	  }
 
 	while (max < min) // Убеждаемся что минимум меньше или равен максимуму
 	  {
 	    std::cout << std::endl <<  "Please enter the maximum value: ";
-	    std::cin >> max;
+
+	    try {get_int(max);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		return;
+	      }
 	  }
 	
 	srand(std::time(0));
@@ -106,7 +139,15 @@ void Mass::initialization() // Начальная инициализация
 	for (int i = 0; i < size; ++i)
 	  {
 	    std::cout << "Enter element number " << i+1 << ": ";
-	    std::cin >> arr[i];
+
+	    try {get_int(arr[i]);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		return;
+	      }
+	    
 	    changes[i] = CREATE;
 	  }
       }; break;
@@ -130,8 +171,11 @@ void Mass::initialization() // Начальная инициализация
 		changes[i] = CREATE;
 	      }
 	  }
+	delete file;
+	file = nullptr;
       }; break;
     }
+  clear_screen();
 }
 
 
@@ -145,7 +189,15 @@ void Mass::insert_item(int pos_add) // Добавляем элемент
 	  if (i == pos_add)
 	    {
 	      std::cout << "Enter a new element: ";
-	      std::cin >> temp[i]; // Инициализируем новый элемент
+
+	      try {get_int(temp[i]);} // Инициализируем новый элемент
+	      catch(std::string error)
+		{
+		  clear_screen();
+		  std::cerr << error << std::endl << std::endl;
+		  return;
+		}
+
 	      temp_ch[i] = INSERT;
 	    } 
 	  else
@@ -169,6 +221,7 @@ void Mass::insert_item(int pos_add) // Добавляем элемент
 
 void Mass::menu_insert_items() // Меню добавления элементов
 {
+  clear_screen();
   if (size == 0) // Если добавляем первый элемент
     {
       insert_item(0);
@@ -189,12 +242,19 @@ void Mass::menu_insert_items() // Меню добавления элементо
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
   
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
+	    clear_screen();
 	    return; 
 	  }; break;
 	  
@@ -212,11 +272,20 @@ void Mass::menu_insert_items() // Меню добавления элементо
 	  {
 	    int pos = size;
 	    std::cout << "Select position from 1 to " << size+1 << ": ";
-	    std::cin >> pos;
+
+	    try {get_int(pos);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		return;
+	      }
+	    
 	    --pos;
 
 	    if (pos < 0 || size < pos)
 	      {
+		clear_screen();
 		std::cerr << std::endl << "Not guess, buddy!" << std::endl;
 		break;
 	      }
@@ -224,6 +293,7 @@ void Mass::menu_insert_items() // Меню добавления элементо
 	    insert_item(pos);
 	  }; break;
 	}
+      clear_screen();
     }
 }
 
@@ -273,6 +343,7 @@ void Mass::delete_item(int pos_del) // Удаляем элемент
 
 void Mass::menu_delete_items() // Меню удаления элементов
 {
+  clear_screen();
   if (size < 2) // Если остался последний элемент
     {
       delete_item(0);
@@ -293,12 +364,19 @@ void Mass::menu_delete_items() // Меню удаления элементов
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
       
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
+	    clear_screen();
 	    return; 
 	  }; break;
 	  
@@ -316,17 +394,27 @@ void Mass::menu_delete_items() // Меню удаления элементов
 	  {
 	    if (size == 0)
 	      {
+		clear_screen();
 		std::cerr << std::endl << "What are you going to delete here?"; // Что ты тут собрался удалять?!
 		break;
 	      }
 	    
 	    int pos = size;
 	    std::cout << "Select position from 1 to " << size << ": ";
-	    std::cin >> pos;
+
+	    try {get_int(pos);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		break;
+	      }
+	    
 	    --pos;
 	    
 	    if (pos < 0 || size < pos)
 	      {
+		clear_screen();
 		std::cerr << std::endl << "Not guess, buddy!" << std::endl;
 		break;
 	      }
@@ -334,6 +422,7 @@ void Mass::menu_delete_items() // Меню удаления элементов
 	    delete_item(pos);
 	  }; break;
 	}
+      clear_screen();
     }
 }
 
@@ -352,6 +441,7 @@ int Mass::find_item(int find, int mode = 0, int pos_start = 0) // Ищем эл�
 
 void Mass::menu_find_items() // Меню поиска элементов
 {
+  clear_screen();
   int what_to_do = 0, what_to_find = 0;
   
   while(1)
@@ -366,18 +456,32 @@ void Mass::menu_find_items() // Меню поиска элементов
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
 
       if (0 < what_to_do && what_to_do <=3)
 	{
 	  std::cout << "Enter an item to search for: ";
-	  std::cin >> what_to_find;
+
+	  try {get_int(what_to_find);}
+	  catch(std::string error)
+	    {
+	      clear_screen();
+	      std::cerr << error << std::endl << std::endl;
+	      continue;
+	    }
 	}
       
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
+	    clear_screen();
 	    return; 
 	  }; break;
 	  
@@ -426,12 +530,14 @@ void Mass::menu_find_items() // Меню поиска элементов
 	    std::cout << std::endl;
 	  }; break;
 	}
+      clear_screen();
     }
 }
 
 
 void Mass::menu_replace_items() // Меню замены элементов
 {
+  clear_screen();
   int what_to_do = -1, what_to_replace = 0, new_item = 0;
   
   while(1)
@@ -445,12 +551,19 @@ void Mass::menu_replace_items() // Меню замены элементов
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
       
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
 
       switch(what_to_do)
 	{
 	case 0:
 	  {
+	    clear_screen();
 	    return;
 	  } break;
 
@@ -458,10 +571,18 @@ void Mass::menu_replace_items() // Меню замены элементов
 	  {
 	    std::cout << std::endl << "Enter replacement index from 0 to " << size-1 << ":";
 	    int index = 0;
-	    std::cin >> index;
+
+	    try {get_int(index);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		break;
+	      }
 
 	    if (index < 0 || size <= index)
 	      {
+		clear_screen();
 		std::cerr << std::endl << "Out of range" << std::endl;
 		break;
 	      }
@@ -469,7 +590,15 @@ void Mass::menu_replace_items() // Меню замены элементов
 	    else
 	      {
 		std::cout << "Enter a new element: ";
-		std::cin >> new_item;
+
+		try {get_int(new_item);}
+		catch(std::string error)
+		  {
+		    clear_screen();
+		    std::cerr << error << std::endl << std::endl;
+		    break;
+		  }
+		
 		arr[index] = new_item;
 		clear_changes();
 		changes[index] = REPLACE;
@@ -478,6 +607,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 
 	case 2:
 	  {
+	    clear_screen();
 	    std::cout << std::endl;
 	    print();
 	    what_to_do = -1;
@@ -489,18 +619,32 @@ void Mass::menu_replace_items() // Меню замены элементов
 		      << "0.Back" << std::endl << std::endl
 		      << "Select action: ";
 	    
-	    std::cin >> what_to_do;
+	    try {get_int(what_to_do);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		break;
+	      }
 	    
 	    if (0 < what_to_do && what_to_do <=3)
 	      {
 		std::cout << "Enter an item to replace for: ";
-		std::cin >> what_to_replace;
+
+		try {get_int(what_to_replace);}
+		catch(std::string error)
+		  {
+		    clear_screen();
+		    std::cerr << error << std::endl << std::endl;
+		    break;
+		  }
 	      }
 	    
 	    switch(what_to_do)
 	      {
 	      case 0: // Выбегаем
 		{
+		  clear_screen();
 		  return; 
 		}; break;
 		
@@ -512,7 +656,15 @@ void Mass::menu_replace_items() // Меню замены элементов
 		  else
 		    {
 		      std::cout << "Enter a new element: ";
-		      std::cin >> new_item;
+
+		      try {get_int(new_item);}
+		      catch(std::string error)
+			{
+			  clear_screen();
+			  std::cerr << error << std::endl << std::endl;
+			  return;
+			}
+		      
 		      arr[res] = new_item;
 		      clear_changes();
 		      changes[res] = REPLACE;
@@ -527,7 +679,15 @@ void Mass::menu_replace_items() // Меню замены элементов
 		  else
 		    {
 		      std::cout << "Enter a new element: ";
-		      std::cin >> new_item;
+
+		      try {get_int(new_item);}
+		      catch(std::string error)
+			{
+			  clear_screen();
+			  std::cerr << error << std::endl << std::endl;
+			  return;
+			}
+		      
 		      arr[res] = new_item;
 		      clear_changes();
 		      changes[res] = REPLACE;
@@ -540,7 +700,14 @@ void Mass::menu_replace_items() // Меню замены элементов
 		  clear_changes();
 
 		  std::cout << "Enter a new element: ";
-		  std::cin >> new_item;
+
+		  try {get_int(new_item);}
+		  catch(std::string error)
+		    {
+		      clear_screen();
+		      std::cerr << error << std::endl << std::endl;
+		      return;
+		    }
 		  
 		  while(1)
 		    {
@@ -558,6 +725,7 @@ void Mass::menu_replace_items() // Меню замены элементов
 	      }
 	  }
 	}
+      clear_screen();
     }
 }
 
@@ -592,6 +760,7 @@ void Mass::sort_items() // Сортируем элементы
 {
   clear_changes();
   quick_sort(0, size-1);
+  clear_screen();
 }
 
 
@@ -607,6 +776,7 @@ void Mass::shuffling_items() // Перемешиваем элементы
       changes[i] = SHUF;
       changes[j] = SHUF;
     }
+  clear_screen();
 }
 
 
@@ -680,6 +850,28 @@ void Mass::print() // Вывод массива на экран с индика�
 	}
     }
     std::cout << "}";
+}
+
+
+void Mass::get_int(int &var) // Получение числа от пользователя
+{
+  std::cin >> var;
+  if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      throw std::string{"Incorrect value"};
+    }
+}
+
+
+void Mass::clear_screen() // Очистка экрана для linux и windows
+{
+  #ifdef LINUX
+  system("clear");
+  #elif WIN
+  system("cls");
+  #endif
 }
 
 

@@ -5,6 +5,7 @@
 int main()
 {
   Main_mass mass;
+  mass.clear_screen();
   mass.create();
 
   return 0;

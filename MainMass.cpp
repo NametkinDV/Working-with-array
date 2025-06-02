@@ -43,6 +43,7 @@ void Main_mass::create_mass(int pos_add) // Создаём массив
 
 void Main_mass::menu_create_mass() // Меню создания массива
 {
+  clear_screen();
   if (size == 0) // Если создаём первый массив
     {
       create_mass(0);
@@ -62,12 +63,19 @@ void Main_mass::menu_create_mass() // Меню создания массива
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
 
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
       
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
+	    clear_screen();
 	    return; 
 	  }; break;
 	  
@@ -85,7 +93,15 @@ void Main_mass::menu_create_mass() // Меню создания массива
 	  {
 	    int pos = size;
 	    std::cout << "Select position from 1 to " << size+1 << ":";
-	    std::cin >> pos;
+
+	    try {get_int(pos);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		return;
+	      }
+
 	    --pos;
 
 	    if (pos < 0 || size < pos)
@@ -98,6 +114,7 @@ void Main_mass::menu_create_mass() // Меню создания массива
 	  }; break;
 	}
     }
+  clear_screen();
 }
 
 
@@ -138,6 +155,7 @@ void Main_mass::delete_mass(int pos_del) // Удаляем массив
 
 void Main_mass::menu_delete_mass() // Меню удаления массива
 {
+  clear_screen();
   if (size < 2) // Если остался последний массив
     {
       delete_mass(0);
@@ -157,12 +175,19 @@ void Main_mass::menu_delete_mass() // Меню удаления массива
 		<< "0.Back" << std::endl << std::endl
 		<< "Select action: ";
 
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
       
       switch(what_to_do)
 	{
 	case 0: // Выбегаем
 	  {
+	    clear_screen();
 	    return; 
 	  }; break;
 	  
@@ -186,7 +211,15 @@ void Main_mass::menu_delete_mass() // Меню удаления массива
 	    
 	    int pos = size;
 	    std::cout << "Select position from 1 to " << size << ":";
-	    std::cin >> pos;
+
+	    try {get_int(pos);}
+	    catch(std::string error)
+	      {
+		clear_screen();
+		std::cerr << error << std::endl << std::endl;
+		return;
+	      }
+	    
 	    --pos;
 
 	    if (pos < 0 || size < pos)
@@ -199,6 +232,7 @@ void Main_mass::menu_delete_mass() // Меню удаления массива
 	  }; break;
 	}
     }
+  clear_screen();
 }
 
 
@@ -275,7 +309,13 @@ void Main_mass::create() // Запуск работы с массивами
 		<< "0.Exit" << std::endl << std::endl
 		<< "Select action: ";
       
-      std::cin >> what_to_do;
+      try {get_int(what_to_do);}
+      catch(std::string error)
+	{
+	  clear_screen();
+	  std::cerr << error << std::endl << std::endl;
+	  continue;
+	}
 
       if (2 < what_to_do && what_to_do <= 8) // Для пунктов 2-8 просим выбрать нужный массив
 	{
@@ -333,4 +373,26 @@ void Main_mass::create() // Запуск работы с массивами
 	  }; break;  
 	}
     }
+}
+
+
+void Main_mass::get_int(int &var) // Получение числа от пользователя
+{
+  std::cin >> var;
+  if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      throw std::string{"Incorrect value"};
+    }
+}
+
+
+void Main_mass::clear_screen() // Очистка экрана для linux и windows
+{
+  #ifdef LINUX
+  system("clear");
+  #elif WIN
+  system("cls");
+  #endif
 }

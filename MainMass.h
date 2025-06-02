@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Mass.h"
 
+//#define LINUX
+//#define WIN
 
 class Main_mass
 {
@@ -19,7 +21,9 @@ class Main_mass
   void print_mass(); // Вывод массивов на экран
 
 public:
-  void create(); // Запуск работы с массивами 
+  void create(); // Запуск работы с массивами
+  void get_int(int &var); // Получение числа от пользователя
+  void clear_screen(); // Очистка экрана для linux и windows
 };
 
 
