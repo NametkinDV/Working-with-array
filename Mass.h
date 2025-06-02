@@ -10,17 +10,21 @@
 
 class Mass
 {
-  int *arr = nullptr; // Массив элементов
+  int *arr = nullptr;     // Массив элементов
   int *changes = nullptr; // Массив изменений
-  int size = 0; // Размер массива
+  int size = 0;           // Размер массива
+  int deleted_item = 0;   // Последний удалённый элемент
+  
   enum change {NONE, CREATE, DELETE_FORWARD, DELETE_BACK, DELETE_LAST, INSERT, FIND, REPLACE, SORT, SHUF};
-
+  enum colors {DEF, RED, GREEN, YELLOW, BLUE};
+  
   void create_array(); // Создаём массив
   void open_file(std::ifstream **input, int &file_size); // Открытие файла и определение его размера
   void insert_item(int pos_add); // Добавляем элемент
   void delete_item(int pos_del); // Удаляем элемент
   int find_item(int find, int mode, int pos_start); // Ищем элемент
   void quick_sort(int left, int right); // Быстрая сортировка
+  std::string change_color(int color); // Изменение цвета текста
   
 public:
   void initialization(); // Начальная инициализация

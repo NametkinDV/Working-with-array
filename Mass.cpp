@@ -305,6 +305,8 @@ void Mass::delete_item(int pos_del) // Удаляем элемент
       std::cout << std::endl << "The array is empty! There is nothing to delete!" << std::endl;
       return;
     }
+
+  deleted_item = arr[pos_del]; // Сохраняем удалённый элемент для последнего вывода
   
   if (size == 1) // Удаляем последний оставшийся элемент
     {
@@ -487,6 +489,7 @@ void Mass::menu_find_items() // Меню поиска элементов
 	  
 	case 1: // Ищем первое вхождение элемента
 	  {
+	    clear_screen();
 	    clear_changes();
 	    int res = find_item(what_to_find);
 
@@ -494,12 +497,13 @@ void Mass::menu_find_items() // Меню поиска элементов
 	    else
 	      {
 		changes[res] = FIND;
-		std::cout << std::endl << "Element position: " << ++res << std::endl;		
+		std::cout << std::endl << "Element position: ( " << ++res << " )" << std::endl;		
 	      }
 	  }; break;
 	  
 	case 2: // Ищем последнее вхождение элемента
 	  {
+	    clear_screen();
 	    clear_changes();
 	    int res = find_item(what_to_find, 1);
 
@@ -507,14 +511,15 @@ void Mass::menu_find_items() // Меню поиска элементов
 	    else
 	      {
 		changes[res] = FIND;
-		std::cout << std::endl << "Element position: " << ++res << std::endl;
+		std::cout << std::endl << "Element position: ( " << ++res << " )" << std::endl;
 	      }
 	  }; break;
 	  
 	case 3: // Ищем все вхождения элемента
 	  {
+	    clear_screen();
 	    clear_changes();
-	    std::cout << std::endl << "Element positions: ";
+	    std::cout << std::endl << "Element positions: ( ";
 	    int res = 0, count = 0;
 	    
 	    while(1)
@@ -523,14 +528,13 @@ void Mass::menu_find_items() // Меню поиска элементов
 		if (res == -1) break;		  
 
 		changes[res] = FIND;
-		std::cout << ++res << " ";
+		std::cout << ++res << "; ";
 		++count;		  
 	      }
 	    if (count == 0) std::cout << std::endl << "Element not found" << std::endl;
-	    std::cout << std::endl;
+	    std::cout << ")" << std::endl;
 	  }; break;
 	}
-      clear_screen();
     }
 }
 
@@ -794,9 +798,9 @@ void Mass::print() // Вывод массива на экран с индика�
   
   if (changes != nullptr && changes[0] == DELETE_LAST) // Если все элементы удалены, но нужно пометить последний удалённый элемент
     {
-      	    std::cout << "| |";
-	    delete[] changes;
-	    changes = nullptr;
+      std::cout << change_color(RED) << deleted_item << " " << change_color(DEF);
+      delete[] changes;
+      changes = nullptr;
     }
   
   for(int i = 0; i < size; ++i) // Выводим элементы с индикацией
@@ -810,47 +814,83 @@ void Mass::print() // Вывод массива на экран с индика�
 
 	case CREATE:
 	  {
-	    std::cout << '|' << arr[i] << '|' << " ";
+	    std::cout << change_color(GREEN) << arr[i] << change_color(DEF) << " ";
 	  } break;
 
 	case DELETE_FORWARD:
 	  {
-	    std::cout << "| | " << arr[i] << " ";
+	    std::cout << change_color(RED) << deleted_item << " " << change_color(DEF) << arr[i] << " ";
 	  } break;
 
 	case DELETE_BACK:
 	  {
-	    std::cout << arr[i] << " | | ";
+	    std::cout << arr[i] << change_color(RED) << " " << deleted_item << " " << change_color(DEF);
 	  } break;
 
 	case INSERT:
 	  {
-	    std::cout << '|' << arr[i] << '|' << " ";
+	    std::cout << change_color(GREEN) << arr[i] << change_color(DEF) << " ";
 	  } break;
 
 	case FIND:
 	  {
-	    std::cout << '*' << arr[i] << '*' << " ";
+	    std::cout << change_color(BLUE) << arr[i] << change_color(DEF) << " ";
 	  } break;
 
 	case REPLACE:
 	  {
-	    std::cout << '(' << arr[i] << ')' << " ";
+	    std::cout << change_color(YELLOW) << arr[i] << change_color(DEF) << " ";
 	  } break;
 
 	case SORT:
 	  {
-	    std::cout << '<' << arr[i] << '>' << " ";
+	    std::cout << change_color(YELLOW) << arr[i] << change_color(DEF) << " ";
 	  } break;
 
 	case SHUF:
 	  {
-	    std::cout << '#' << arr[i] << '#' << " ";
+	    std::cout << change_color(YELLOW) << arr[i] << change_color(DEF) << " ";
 	  } break;
 	}
     }
     std::cout << "}";
 }
+
+
+#ifdef LINUX
+std::string Mass::change_color(int color) // Изменение цвета текста
+{
+  switch(color)
+    {
+    case DEF:
+      {
+	return "\033[0m";
+      } break;
+      
+    case RED:
+      {
+	return "\033[31m";
+      } break;
+      
+    case GREEN:
+      {
+	return "\033[32m";
+      } break;
+      
+    case YELLOW:
+      {
+	return "\033[33m";
+      } break;
+      
+    case BLUE:
+      {
+	return "\033[34m";
+      } break;
+    }
+
+  return "\033[0m";
+}
+#endif
 
 
 void Mass::get_int(int &var) // Получение числа от пользователя
